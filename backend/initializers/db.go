@@ -15,7 +15,7 @@ var DB *gorm.DB
 
 func ConnectDB(config *Config) {
 	var err error
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", config.DBUserName, config.DBUserPassword, config.DBHost, config.DBPort, config.DBName)
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", config.DBUserName, config.DBUserPassword, config.DBHost, config.DBPort, config.DBName)
 
 	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
@@ -27,6 +27,8 @@ func ConnectDB(config *Config) {
 
 	log.Println("Running Migrations")
 	DB.AutoMigrate(&models.User{})
+	DB.AutoMigrate(&models.ChartData{})
+	DB.AutoMigrate(&models.OptionChainEntry{})
 
 	log.Println("🚀 Connected Successfully to the Database")
 }
