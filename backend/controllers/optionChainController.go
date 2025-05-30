@@ -105,7 +105,7 @@ func GetOptionChain(c *fiber.Ctx) error {
 	if err := initializers.DB.Order("strike_price ASC").Find(&optionChainData).Error; err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Invalid email or password"})
 	}
-	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"status": "success", "data": fiber.Map{"optionChainData": optionChainData}})
+	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"status": "success", "data": fiber.Map{"optionChainData": optionChainData, "aimStrike": 22250}})
 }
 
 func parseNullableFloat(s string) *float64 {

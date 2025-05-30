@@ -6,6 +6,7 @@ const auth = useAuthStore();
 
 const data = reactive({
     optionData: [],
+    aimStrike: 0,
     toggles: {
         gamma: false,
         delta: false,
@@ -25,14 +26,25 @@ onMounted(async () => {
 
     console.log(response);
     data.optionData = response.data.data.optionChainData;
+    data.aimStrike = response.data.data.aimStrike;
 });
 
-watch(() => data.toggles,(newToggles) => {
+watch(
+    () => data.toggles,
+    (newToggles) => {
         const activeCount = Object.values(newToggles).filter(Boolean).length;
         data.span = 6 + activeCount;
     },
     { deep: true }
 );
+
+const checkHighLight = (strikePrice, type) => {
+    if(strikePrice < data.aimStrike && type === 'call'){
+        return "nhighlight"
+    } else if(strikePrice > data.aimStrike && type === 'put'){
+        return "nhighlight"
+    }
+}
 </script>
 
 <template>
@@ -90,54 +102,54 @@ watch(() => data.toggles,(newToggles) => {
                 </thead>
                 <tbody style="height: 800px; overflow-y: scroll">
                     <template v-for="row in data.optionData">
-                        <tr>
+                        <tr :class="`${data.aimStrike === row.strikePrice ? 'highlight' : ''}`">
                             <!-- Calls  -->
-                            <td v-show="data.toggles.imtProb">
+                            <td :class="checkHighLight(row.strikePrice, 'call')" v-show="data.toggles.imtProb">
                                 {{ row.citmp }}
                             </td>
-                            <td v-show="data.toggles.delta">
+                            <td :class="checkHighLight(row.strikePrice, 'call')" v-show="data.toggles.delta">
                                 {{ row.callDelta }}
                             </td>
-                            <td v-show="data.toggles.theta">
+                            <td :class="checkHighLight(row.strikePrice, 'call')" v-show="data.toggles.theta">
                                 {{ row.callTheta }}
                             </td>
-                            <td v-show="data.toggles.vega">
+                            <td :class="checkHighLight(row.strikePrice, 'call')" v-show="data.toggles.vega">
                                 {{ row.callVega }}
                             </td>
-                            <td v-show="data.toggles.gamma">
+                            <td :class="checkHighLight(row.strikePrice, 'call')" v-show="data.toggles.gamma">
                                 {{ row.callGamma }}
                             </td>
-                            <td>0</td>
-                            <td>{{ row.callOi }}</td>
-                            <td>{{ row.callVolume }}</td>
-                            <td>{{ row.callIV }}</td>
-                            <td>{{ row.callLtp }}</td>
-                            <td>0</td>
+                            <td :class="checkHighLight(row.strikePrice, 'call')">0</td>
+                            <td :class="checkHighLight(row.strikePrice, 'call')">{{ row.callOi }}</td>
+                            <td :class="checkHighLight(row.strikePrice, 'call')">{{ row.callVolume }}</td>
+                            <td :class="checkHighLight(row.strikePrice, 'call')">{{ row.callIV }}</td>
+                            <td :class="checkHighLight(row.strikePrice, 'call')">{{ row.callLtp }}</td>
+                            <td :class="checkHighLight(row.strikePrice, 'call')">0</td>
 
                             <td style="font-weight: 600">
                                 {{ row.strikePrice }}
                             </td>
 
                             <!-- Puts -->
-                            <td>0</td>
-                            <td>{{ row.putLtp }}</td>
-                            <td>{{ row.putIv }}</td>
-                            <td>{{ row.putVolume }}</td>
-                            <td>{{ row.putOi }}</td>
-                            <td>0</td>
-                            <td v-show="data.toggles.gamma">
+                            <td :class="checkHighLight(row.strikePrice, 'put')">0</td>
+                            <td :class="checkHighLight(row.strikePrice, 'put')">{{ row.putLtp }}</td>
+                            <td :class="checkHighLight(row.strikePrice, 'put')">{{ row.putIv }}</td>
+                            <td :class="checkHighLight(row.strikePrice, 'put')">{{ row.putVolume }}</td>
+                            <td :class="checkHighLight(row.strikePrice, 'put')">{{ row.putOi }}</td>
+                            <td :class="checkHighLight(row.strikePrice, 'put')">0</td>
+                            <td :class="checkHighLight(row.strikePrice, 'put')" v-show="data.toggles.gamma">
                                 {{ row.putGamma }}
                             </td>
-                            <td v-show="data.toggles.vega">
+                            <td :class="checkHighLight(row.strikePrice, 'put')" v-show="data.toggles.vega">
                                 {{ row.putVega }}
                             </td>
-                            <td v-show="data.toggles.theta">
+                            <td :class="checkHighLight(row.strikePrice, 'put')" v-show="data.toggles.theta">
                                 {{ row.putTheta }}
                             </td>
-                            <td v-show="data.toggles.delta">
+                            <td :class="checkHighLight(row.strikePrice, 'put')" v-show="data.toggles.delta">
                                 {{ row.putDelta }}
                             </td>
-                            <td v-show="data.toggles.imtProb">
+                            <td :class="checkHighLight(row.strikePrice, 'put')" v-show="data.toggles.imtProb">
                                 {{ row.pitmp }}
                             </td>
                         </tr>
@@ -149,7 +161,7 @@ watch(() => data.toggles,(newToggles) => {
 </template>
 
 <style scoped>
-table{
+table {
     table-layout: auto;
     width: 100%;
 }
@@ -185,5 +197,11 @@ button.selected {
     background-color: #1976d2;
     color: white;
     border-color: #1976d2;
+}
+.highlight{
+    background-color: #cefc8a!important;
+}
+.nhighlight{
+    background-color: #f1eed9!important;
 }
 </style>
