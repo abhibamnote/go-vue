@@ -84,7 +84,7 @@ func CreateOptionChain(c *fiber.Ctx) error {
 			PutVega:    parseNullableFloat(row[16]),
 			PutVolume:  parseNullableInt(row[17]),
 
-			StrikePrice: parseFloatOrZero(row[18]), // Non-nullable
+			StrikePrice: parseFloatOrZero(row[18]),
 		})
 
 	}
