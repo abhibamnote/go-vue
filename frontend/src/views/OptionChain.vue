@@ -18,7 +18,7 @@ const data = reactive({
 });
 
 onMounted(async () => {
-    const response = await axios.get("http://127.0.0.1:8000/api/option-chain", {
+    const response = await axios.get(import.meta.env.VITE_BACKEND_URL+"/api/option-chain", {
         headers: {
             Authorization: auth.token,
         },

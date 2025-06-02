@@ -13,7 +13,7 @@ import axios from "axios";
 const auth = useAuthStore();
 onMounted(async () => {
 
-    const response = await axios.get("http://127.0.0.1:8000/api/chart-data", {
+    const response = await axios.get(import.meta.env.BACKEND_URL+"/api/chart-data", {
         headers: {
             Authorization: auth.token
         }

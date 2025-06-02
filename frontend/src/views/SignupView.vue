@@ -49,7 +49,7 @@ const submitForm = async () => {
     if (valid) {
         try {
             const response = await axios.post(
-                "http://127.0.0.1:8000/api/auth/signup",
+                import.meta.env.VITE_BACKEND_URL+"/api/auth/signup",
                 {   
                     firstName: form.firstName,
                     lastName: form.lastName,

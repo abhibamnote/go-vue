@@ -10,7 +10,7 @@ type Config struct {
 	DBUserPassword string `mapstructure:"MYSQL_PASSWORD"`
 	DBName         string `mapstructure:"MYSQL_DATABASE"`
 	DBPort         string `mapstructure:"MYSQL_PORT"`
-
+	Port		   string `mapstructure:"PORT"`
 	JWT			   string `mapstructure:"JWT"`
 	ClientOrigin string `mapstructure:"CLIENT_ORIGIN"`
 }

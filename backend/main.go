@@ -11,6 +11,8 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
+var config initializers.Config
+
 func init() {
     config, err := initializers.LoadConfig(".")
     if err != nil {
@@ -45,5 +47,5 @@ func main() {
 	optionChain.Post("/", controllers.CreateOptionChain)
 	optionChain.Get("/", controllers.GetOptionChain)
 
-    log.Fatal(app.Listen(":8000"))
+    log.Fatal(app.Listen(":" + config.Port))
 };

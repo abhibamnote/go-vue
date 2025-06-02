@@ -16,13 +16,16 @@ const errors = reactive({
     password: false,
 });
 
+console.log(import.meta.env.VITE_BACKEND_URL);
+
+
 const submitForm = async () => {
     errors.email = !form.email.trim();
     errors.password = !form.password.trim();
     
     if (!errors.email && !errors.password) {
         // Form is valid, proceed with login
-        const response = await axios.post('http://127.0.0.1:8000/api/auth/login', {
+        const response = await axios.post(import.meta.env.BACKEND_URL+'/api/auth/login', {
             email: form.email,
             password: form.password
         })
