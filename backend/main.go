@@ -45,5 +45,5 @@ func main() {
 	optionChain.Post("/", controllers.CreateOptionChain)
 	optionChain.Get("/", controllers.GetOptionChain)
 
-    log.Fatal(app.Listen(":6500"))
+    log.Fatal(app.Listen(":8000"))
 };
