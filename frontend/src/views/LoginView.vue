@@ -25,13 +25,19 @@ const submitForm = async () => {
     
     if (!errors.email && !errors.password) {
         // Form is valid, proceed with login
-        const response = await axios.post(import.meta.env.BACKEND_URL+'/api/auth/login', {
-            email: form.email,
-            password: form.password
-        })
-        auth.login(response.data.data.token);
-        router.push('/')
-        console.log(response);
+        try {
+            const response = await axios.post(import.meta.env.VITE_BACKEND_URL+'/api/auth/login', {
+                email: form.email,
+                password: form.password
+            })
+            auth.login(response.data.data.token);
+            router.push('/')
+            console.log(response);
+            
+        } catch (error) {
+            console.log(error);
+                
+        }
         
     }
 };
