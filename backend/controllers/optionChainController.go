@@ -37,7 +37,7 @@ func CreateOptionChain(c *fiber.Ctx) error {
 	}
 
 	// Expected headers for mapping
-	expected := []string{"rateDate", "open", "close", "high", "low"}
+	expected := []string{"rateDate", "open", "close", "high", "low"} //correct
 	if len(headers) < len(expected) {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "CSV missing required columns",

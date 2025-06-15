@@ -45,8 +45,23 @@ onMounted(async () => {
                 },
             },
         ],
+        plotOptions: {
+            candlestick: {
+                color: 'red',        
+                lineColor: 'darkred', 
+                upColor: 'green',
+                upLineColor: 'darkgreen'
+            },
+        },
         lang: {
             locale: 'en'
+        },
+        yAxis: {
+            minPadding: 0.5,
+            opposite: false
+        },
+        xAxis: {
+            minPadding: 0.5
         }
     });
 });
