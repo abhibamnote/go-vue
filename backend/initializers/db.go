@@ -29,6 +29,8 @@ func ConnectDB(config *Config) {
 	DB.AutoMigrate(&models.User{})
 	DB.AutoMigrate(&models.ChartData{})
 	DB.AutoMigrate(&models.OptionChainEntry{})
+	DB.AutoMigrate(&models.Master{})
+	DB.AutoMigrate(&models.WatchList{})
 
 	log.Println("🚀 Connected Successfully to the Database")
 }

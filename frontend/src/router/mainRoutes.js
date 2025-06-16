@@ -2,6 +2,7 @@ import MainLayout from "@/layouts/MainLayout.vue";
 import ChartView from "@/views/ChartView.vue";
 import IndexView from "@/views/IndexView.vue";
 import OptionChain from "@/views/OptionChain.vue";
+import StrategyView from "@/views/StrategyView.vue";
 
 
 const routes = [
@@ -23,6 +24,11 @@ const routes = [
                 path: "/option-chain",
                 name: "Option Chain",
                 component: OptionChain
+            },
+            {
+                path: "/strategy",
+                name: "strategy",
+                component: StrategyView
             }
         ],
     },

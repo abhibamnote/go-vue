@@ -45,5 +45,19 @@ func main() {
 	optionChain.Post("/", controllers.CreateOptionChain)
 	optionChain.Get("/", controllers.GetOptionChain)
 
+	masterData := api.Group("/master-data", middlewares.Authenticate)
+	// masterData.Post("/", controllers.CreateMasterDataBatch)
+	masterData.Get("/", controllers.GetMasterData)
+
+	watchlist := api.Group("/watchlist", middlewares.Authenticate)
+	watchlist.Post("/", controllers.PostWatchList)
+	watchlist.Get("/", controllers.GetWatchList)
+	watchlist.Delete("/:id", controllers.DeleteWatchList)
+
+	err := controllers.CreateScheduler()
+	if err != nil {
+		log.Fatal(err)
+	}
+
     log.Fatal(app.Listen(":8000"))
 };

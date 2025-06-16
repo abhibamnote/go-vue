@@ -6,6 +6,7 @@ defineEmits(["toggle-drawer"]);
 const items = [
     { title: "Chart", route: "/chart" },
     { title: "Option Chain", route: "/option-chain" },
+    { title: 'Strategy', route: '/strategy' },
 ];
 </script>
 
