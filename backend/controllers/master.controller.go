@@ -4,6 +4,10 @@ import (
 	"archive/zip"
 	"encoding/csv"
 	"fmt"
+	"github.com/abhibamnote/go-vue/backend/initializers"
+	"github.com/abhibamnote/go-vue/backend/models"
+	"github.com/gofiber/fiber/v2"
+	"github.com/robfig/cron"
 	"io"
 	"log"
 	"net/http"
@@ -11,13 +15,14 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
-	"github.com/abhibamnote/go-vue/backend/initializers"
-	"github.com/abhibamnote/go-vue/backend/models"
-	"github.com/gofiber/fiber/v2"
-	"github.com/robfig/cron"
 )
 
 var MasterData []models.Master
+
+func TriggerData(c *fiber.Ctx) error {
+	SetMasterData()
+	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"status": "success", "data": fiber.Map{"masterData": "created"}})
+}
 
 func GetMasterData(c *fiber.Ctx) error {
 	segment := c.Query("segment")
@@ -26,19 +31,21 @@ func GetMasterData(c *fiber.Ctx) error {
 	fmt.Println(search)
 
 	if len(MasterData) == 0 {
-		if err:= initializers.DB.Find(&MasterData).Error; err != nil {
+		if err := initializers.DB.Find(&MasterData).Error; err != nil {
 			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Invalid email or password"})
 		}
 	}
 
 	var filteredData []models.Master
 
-	if segment != "" {
+	if segment != "" || search != "" {
 		for _, master := range MasterData {
-			if master.Segment == segment && strings.Contains(master.Symbol, search) {
+			if (segment == "" || master.Segment == segment) && strings.Contains(master.Symbol, search) {
 				filteredData = append(filteredData, master)
 			}
 		}
+	} else {
+		filteredData = MasterData
 	}
 
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"status": "success", "data": fiber.Map{"masterData": filteredData}})
@@ -60,7 +67,7 @@ func SetMasterData() {
 	url := "https://app.definedgesecurities.com/public/allmaster.zip"
 	path := "assets/allmaster.zip"
 
-	err := DownloadFile(path, url) 
+	err := DownloadFile(path, url)
 	if err != nil {
 		log.Print(err)
 		// return
@@ -73,7 +80,7 @@ func SetMasterData() {
 	}
 
 	excelPath := "assets/allmaster.csv"
-	
+
 	file, err := os.Open(excelPath)
 	if err != nil {
 		// return err
@@ -84,9 +91,9 @@ func SetMasterData() {
 
 	// Parse CSV
 	reader := csv.NewReader(file)
-	
+
 	for {
-		row, err :=reader.Read()
+		row, err := reader.Read()
 		if err == io.EOF {
 			break
 		} else if err != nil {
@@ -114,15 +121,15 @@ func SetMasterData() {
 		})
 	}
 
-	res := initializers.DB.Exec("TRUNCATE TABLE masters")
+	res := initializers.DB.Exec("DELETE FROM masters")
 	if res.Error != nil {
 		// return res.Error
 		return
 
 	}
 
-	batchSize := 1000;
-	for i := 0; i < len(MasterData); i+=batchSize {
+	batchSize := 1000
+	for i := 0; i < len(MasterData); i += batchSize {
 		end := i + batchSize
 		if end > len(MasterData) {
 			end = len(MasterData)
@@ -144,7 +151,6 @@ func SetMasterData() {
 	// return nil
 }
 
-
 func Unzip(src, dest string) error {
 	r, err := zip.OpenReader(src)
 	if err != nil {
@@ -154,7 +160,6 @@ func Unzip(src, dest string) error {
 
 	for _, f := range r.File {
 		fpath := filepath.Join(dest, f.Name)
-
 
 		if f.FileInfo().IsDir() {
 			if err := os.MkdirAll(fpath, os.ModePerm); err != nil {

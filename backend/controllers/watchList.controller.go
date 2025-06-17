@@ -51,7 +51,7 @@ func PostWatchList(c *fiber.Ctx) error {
 func DeleteWatchList(c *fiber.Ctx) error {
 	watchListId := c.Params("id")
 
-	result := initializers.DB.Delete(&models.WatchList{}, watchListId)
+	result := initializers.DB.Unscoped().Delete(&models.WatchList{}, watchListId)
 
 	if result.Error != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Something went wrong"})

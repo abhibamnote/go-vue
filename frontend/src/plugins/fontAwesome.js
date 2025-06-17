@@ -7,7 +7,9 @@ import {
     faBars,
     faTable,
     faCaretDown,
-    faSignOutAlt
+    faSignOutAlt,
+    faArrowUp,
+    faArrowDown
 } from "@fortawesome/free-solid-svg-icons";
 import { faBlogger } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -21,7 +23,9 @@ library.add(
     faBars,
     faTable,
     faCaretDown,
-    faSignOutAlt
+    faSignOutAlt,
+    faArrowUp,
+    faArrowDown
 );
 
 export { FontAwesomeIcon };

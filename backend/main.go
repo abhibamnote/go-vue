@@ -46,7 +46,7 @@ func main() {
 	optionChain.Get("/", controllers.GetOptionChain)
 
 	masterData := api.Group("/master-data", middlewares.Authenticate)
-	// masterData.Post("/", controllers.CreateMasterDataBatch)
+	masterData.Post("/", controllers.TriggerData)
 	masterData.Get("/", controllers.GetMasterData)
 
 	watchlist := api.Group("/watchlist", middlewares.Authenticate)
@@ -58,6 +58,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+
 
     log.Fatal(app.Listen(":8000"))
 };
