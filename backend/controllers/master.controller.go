@@ -48,7 +48,9 @@ func GetMasterData(c *fiber.Ctx) error {
 		filteredData = MasterData
 	}
 
-	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"status": "success", "data": fiber.Map{"masterData": filteredData}})
+	length := min(len(filteredData), 100)
+
+	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"status": "success", "data": fiber.Map{"masterData": filteredData[0:length]}})
 }
 
 func CreateScheduler() error {
